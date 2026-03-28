@@ -2,6 +2,10 @@
 
 An AI-powered email triage system that protects focus time by intercepting unread emails, scoring their urgency with neural models, and only sending push notifications for emails that truly matter — while you're in a deep work block.
 
+## System Overview
+
+<img src="img/system_overview.png" width="600" />
+
 ## How it works
 
 1. **Automatic Gmail polling** — background loop checks for new unread emails every 30 seconds (configurable), tracking seen IDs to avoid duplicate notifications
