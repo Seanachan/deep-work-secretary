@@ -209,3 +209,9 @@ __marimo__/
 # Pretrained Weights
 *.pt
 *.pth
+
+# Dataset
+data/
+
+# Pdfs
+*.pdf
