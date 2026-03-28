@@ -12,3 +12,4 @@ FOCUS_URGENCY_THRESHOLD = float(os.getenv("FOCUS_URGENCY_THRESHOLD", "0.8"))
 GOOGLE_CALENDAR_ID = os.getenv("GOOGLE_CALENDAR_ID", "primary")
 MLP_MODEL_PATH = os.getenv("MLP_MODEL_PATH", "mlp_model.pt")
 TEXT_MODEL_PATH = os.getenv("TEXT_MODEL_PATH", "text_model.pt")
+POLL_INTERVAL = int(os.getenv("POLL_INTERVAL", "30"))  # seconds between email checks
