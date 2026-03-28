@@ -4,18 +4,18 @@ An AI-powered email triage system that protects focus time by intercepting unrea
 
 ## How it works
 
-1. **Gmail polling** — fetches the top 5 unread emails via the Gmail API (sender, snippet, thread history)
+1. **Automatic Gmail polling** — background loop checks for new unread emails every 30 seconds (configurable), tracking seen IDs to avoid duplicate notifications
 2. **Urgency scoring** — combines two models:
    - **Behavioral MLP** (64→32→1): scores metadata features — sender domain, urgency keywords, snippet length, message frequency, recency
    - **Text Transformer** (d_model=32, 4 heads, 2 layers): scores the email text semantically using a fixed urgency vocabulary
    - Final score = `0.4 × MLP + 0.6 × Transformer`
 3. **Focus block detection** — checks Google Calendar for active focus/lecture/coding events and raises the urgency threshold dynamically
-4. **Notification** — urgent emails punch through via [ntfy.sh](https://ntfy.sh), bypassing iOS/Android Do Not Disturb
+4. **Notification** — urgent emails from real senders punch through via [ntfy.sh](https://ntfy.sh), bypassing iOS/Android Do Not Disturb (noreply senders are automatically filtered out)
 
 ## Project structure
 
 ```
-main.py              # FastAPI app — POST /triage, GET /health
+main.py              # FastAPI app — auto-polling, POST /triage, GET /health
 email_fetcher.py     # Gmail API integration + thread history enrichment
 scorer.py            # Combined MLP + Transformer scoring
 text_analyzer.py     # Transformer inference wrapper
@@ -42,20 +42,23 @@ Place your Google OAuth credentials at `credentials.json` (needs Gmail + Calenda
 NTFY_TOPIC=your-topic
 URGENCY_THRESHOLD=0.7
 FOCUS_URGENCY_THRESHOLD=0.8
+POLL_INTERVAL=30
 ```
 
 ## Running
 
 ```bash
-# Start the API server
+# Start the server — automatic polling begins immediately
 python3 -m uvicorn main:app --reload --port 8000
 
-# Trigger a triage pass
+# Manual triage (processes all unread, not just new)
 curl -X POST http://localhost:8000/triage
 
-# Health check
+# Health check (shows seen email count and poll interval)
 curl http://localhost:8000/health
 ```
+
+Once running, the server automatically polls Gmail every `POLL_INTERVAL` seconds and sends ntfy.sh notifications for urgent new emails. No manual triggering needed.
 
 ## Training
 
