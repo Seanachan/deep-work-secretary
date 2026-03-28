@@ -87,7 +87,7 @@ class EmailTextTransformer(nn.Module):
             d_model=d_model,
             nhead=nhead,
             dim_feedforward=64,
-            dropout=0.0,
+            dropout=0.2,
             batch_first=True,
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
