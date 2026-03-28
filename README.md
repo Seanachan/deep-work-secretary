@@ -4,7 +4,7 @@ An AI-powered email triage system that protects focus time by intercepting unrea
 
 ## System Overview
 
-<img src="img/system_overview.png" width="600" />
+![System Overview](img/system_overview.png)
 
 ## How it works
 
