@@ -4,7 +4,7 @@ import torch.nn as nn
 
 
 class EmailUrgencyMLP(nn.Module):
-    def __init__(self, input_size=5):
+    def __init__(self, input_size=7):
         super(EmailUrgencyMLP, self).__init__()
         self.network = nn.Sequential(
             nn.Linear(input_size, 64),
@@ -36,19 +36,27 @@ def extract_metadata_features(email: dict) -> torch.Tensor:
 
     has_question = 1.0 if '?' in snippet else 0.0
 
+    message_frequency_raw = email.get('message_frequency', 0.0)
+    message_frequency_norm = min(max(message_frequency_raw / 20.0, 0.0), 1.0)
+
+    time_since_last_reply_raw = email.get('time_since_last_reply', 168.0)
+    recency_norm = 1.0 - min(max(time_since_last_reply_raw / 168.0, 0.0), 1.0)
+
     features = [
         snippet_length,
         sender_has_edu,
         sender_has_noreply,
         has_urgent_keyword,
         has_question,
+        message_frequency_norm,
+        recency_norm,
     ]
 
     return torch.tensor([features], dtype=torch.float32)
 
 
 def load_or_init_model(path: str) -> EmailUrgencyMLP:
-    model = EmailUrgencyMLP(input_size=5)
+    model = EmailUrgencyMLP(input_size=7)
 
     if os.path.exists(path):
         model.load_state_dict(torch.load(path, weights_only=True))
