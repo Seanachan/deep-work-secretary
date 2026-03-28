@@ -23,7 +23,6 @@ main.py              # FastAPI app — auto-polling, POST /triage, GET /health
 email_fetcher.py     # Gmail API integration + thread history enrichment
 scorer.py            # Combined MLP + Transformer scoring
 text_analyzer.py     # Transformer inference wrapper
-llm_analyzer.py      # Shim (delegates to text_analyzer)
 calendar_checker.py  # Google Calendar focus block detection
 notifier.py          # ntfy.sh push notification sender
 config.py            # Environment-based configuration
